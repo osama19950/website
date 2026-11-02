@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Structural Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: floating nav over a full-bleed hero video, white intro on faint linework, navy bands of image cards, navy footer. Always light. */
+:root {
+  --white: #FFFFFF;
+  --ink: #15172A;
+  --muted: #5E6275;
+  --navy: #22213A;
+  --navy-2: #2D2C48;
+  --bronze: #8E6A3E;
+  --on-dark: #F3F2F7;
+  --on-dark-muted: #B7B5C8;
+  --font: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--white); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.65; }
+h1, h2, h3 { margin: 0; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--bronze); outline-offset: 3px; }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1180px; margin: 0 auto; }
+.pill { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 12px 22px; font-weight: 600; font-size: 14px; text-decoration: none; border: 0; cursor: pointer; font-family: inherit; }
+.pill.dark { background: var(--ink); color: var(--white); }
+.pill.bronze { background: var(--bronze); color: var(--white); padding: 9px 18px; }
+.pill.light { background: var(--white); color: var(--ink); }
+.pill:hover { filter: brightness(1.12); }
+
+/* Floating nav */
+.nav-shell { position: fixed; z-index: 20; left: 0; right: 0; top: calc(env(safe-area-inset-top, 0px) + 14px); }
+.nav {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: var(--white); border-radius: 12px; padding: 10px 12px 10px 20px;
+  box-shadow: 0 2px 10px rgba(21, 23, 42, .08);
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 18px; letter-spacing: 0.06em; }
+.brand svg { width: 34px; height: 34px; }
+.nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
+.nav ul a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--muted); }
+.nav ul a:hover { color: var(--ink); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.menu-btn { display: none; width: 40px; height: 40px; border: 0; background: none; cursor: pointer; border-radius: 10px; }
+.menu-btn span { display: block; width: 20px; height: 2px; background: var(--ink); margin: 4px auto; }
+.mobile-menu { margin-top: 8px; background: var(--white); border-radius: 12px; padding: 8px; box-shadow: 0 2px 10px rgba(21, 23, 42, .08); }
+.mobile-menu a { display: block; padding: 12px 14px; text-decoration: none; font-weight: 600; border-radius: 10px; }
+.mobile-menu a:hover { background: #F2F1F6; }
+
+/* Hero video */
+.hero { position: relative; height: min(92vh, 860px); min-height: 520px; background: var(--navy); overflow: hidden; color: var(--on-dark); }
+.hero video, .hero .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero .ph { display: grid; place-items: center; color: #6F6C93; }
+.hero .ph svg { width: min(70%, 760px); height: auto; opacity: .7; }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(21,23,42,.15) 30%, rgba(21,23,42,.78)); pointer-events: none; }
+.hero-content { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; padding-bottom: 56px; }
+.hero .eyebrow { font-size: 14px; font-weight: 600; color: #E3C9A6; margin-bottom: 14px; }
+.hero h1 { font-size: clamp(34px, 5.4vw, 68px); font-weight: 800; max-width: 19ch; }
+.hero-row { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
+.hero-row .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.vid-toggle { background: rgba(255,255,255,.16); color: var(--white); backdrop-filter: blur(6px); }
+.ph-note { position: absolute; z-index: 2; top: 104px; right: max(16px, env(safe-area-inset-right, 0px)); font-size: 12px; color: var(--on-dark-muted); background: rgba(255,255,255,.08); padding: 4px 10px; border-radius: 999px; }
+
+/* About */
+.about { position: relative; padding-block: 110px; text-align: center; overflow: hidden; }
+.about .lines { position: absolute; inset: 0; color: var(--ink); opacity: .07; pointer-events: none; }
+.about .lines svg { width: 100%; height: 100%; }
+.about .inner { position: relative; max-width: 720px; margin: 0 auto; display: grid; gap: 20px; justify-items: center; }
+.eyebrow-dark { font-size: 14px; font-weight: 600; color: var(--bronze); }
+.about h2 { font-size: clamp(34px, 4.6vw, 54px); font-weight: 800; }
+.about p { color: var(--muted); font-size: 17px; max-width: 62ch; }
+.stats-band { padding-block: 40px 0; }
+.portrait { width: min(100%, 520px); aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.about + .tools-sec { padding-top: 0; }
+.stats div { border-top: 1px solid #E4E3EC; padding-top: 14px; }
+.stats b { display: block; font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stats span { font-size: 13px; color: var(--muted); }
+
+/* Navy sections */
+.band { background: var(--navy); color: var(--on-dark); padding-block: 96px; }
+.band h2 { font-size: clamp(30px, 4vw, 46px); font-weight: 800; text-align: center; margin-bottom: 48px; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.card {
+  position: relative; border-radius: 8px; overflow: hidden; min-height: 400px;
+  background: var(--navy-2); display: flex; flex-direction: column; justify-content: end;
+}
+.card .media { position: absolute; inset: 0; color: #8C89B0; display: grid; place-items: center; }
+.card .media img { width: 100%; height: 100%; object-fit: cover; }
+.card .media svg { width: 78%; opacity: .55; }
+.card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(21,23,42,0) 25%, rgba(21,23,42,.92) 78%); }
+.card .text { position: relative; z-index: 1; padding: 24px; display: grid; gap: 10px; }
+.card h3 { font-size: 24px; font-weight: 700; }
+.card p { font-size: 14px; color: var(--on-dark-muted); }
+.tag { justify-self: start; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 6px; }
+
+/* Timeline carousel: big portrait cards, two in view, moving one at a time */
+.tl-sec { background: var(--navy); color: var(--on-dark); padding-block: 96px; }
+.tl-head { display: grid; gap: 14px; margin-bottom: 36px; }
+.tl-head h2 { font-size: clamp(30px, 4vw, 46px); font-weight: 800; }
+.tl-head p { color: var(--on-dark-muted); max-width: 56ch; }
+.tl-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.tl-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tl-tabs button { font: inherit; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--on-dark); background: rgba(255,255,255,.1); border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; transition: background .25s ease, color .25s ease; }
+.tl-tabs button:hover { background: rgba(255,255,255,.18); }
+.tl-tabs button[aria-current="true"] { background: var(--white); color: var(--ink); }
+.tl-ctrl { display: flex; align-items: center; gap: 10px; }
+.tl-count { font-size: 13px; color: var(--on-dark-muted); font-variant-numeric: tabular-nums; margin-right: 6px; }
+.tl-arrow { width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0 0 3px; background: rgba(255,255,255,.12); color: var(--white); font: inherit; font-size: 26px; line-height: 1; cursor: pointer; }
+.tl-arrow:hover:not(:disabled) { background: var(--white); color: var(--ink); }
+.tl-arrow:disabled { opacity: .3; cursor: default; }
+.tl-note { min-height: 3.4em; max-width: 72ch; margin-bottom: 20px; font-size: 15px; color: var(--on-dark-muted); }
+.tl-note b { color: var(--white); font-weight: 700; }
+.tl-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; border-radius: 12px; }
+.tl-track::-webkit-scrollbar { display: none; }
+.tl-track:focus-visible { outline-offset: 6px; }
+.tl-slide { position: relative; flex: 0 0 calc((100% - 20px) / 2); aspect-ratio: 4 / 5; scroll-snap-align: start; border-radius: 12px; overflow: hidden; background: var(--navy-2); display: flex; flex-direction: column; justify-content: flex-end; }
+.tl-slide .m { position: absolute; inset: 0; }
+.tl-slide .m img, .tl-slide .m video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.tl-slide::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(21,23,42,.45) 0%, rgba(21,23,42,0) 28%, rgba(21,23,42,.5) 54%, rgba(21,23,42,.95) 100%); pointer-events: none; }
+.tl-slide .yr { position: absolute; z-index: 1; top: 22px; left: 26px; font-size: clamp(44px, 5.6vw, 76px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: var(--white); }
+.tl-slide .text { position: relative; z-index: 1; padding: 28px; display: grid; gap: 10px; }
+.tl-slide .meta { font-size: 13px; color: #E3C9A6; font-weight: 600; }
+.tl-slide h3 { font-size: clamp(26px, 2.8vw, 34px); font-weight: 800; }
+.tl-slide p.desc { color: var(--on-dark); opacity: .88; font-size: 15px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.14); }
+.tl-slide a.more { justify-self: start; color: #E3C9A6; font-weight: 600; font-size: 14px; text-decoration: none; border-bottom: 1px solid rgba(227,201,166,.4); }
+.tl-slide a.more:hover { border-bottom-color: #E3C9A6; }
+@media (max-width: 800px) {
+  .tl-slide { flex-basis: 86%; aspect-ratio: 5 / 8; }
+  .tl-slide .text { padding: 22px; }
+  .tl-slide .yr { top: 18px; left: 22px; }
+  .tl-slide .chips { display: none; }
+}
+
+.tools-sec { padding-block: 96px; }
+.sec-head { margin-bottom: 28px; }
+.sec-head h2 { font-size: clamp(30px, 4vw, 46px); font-weight: 800; }
+
+/* Expertise list */
+.tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.tool { background: #F5F4F9; border-radius: 8px; padding: 26px; }
+.tool h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+.tool ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; color: var(--muted); font-size: 15px; }
+
+/* Footer */
+footer { position: relative; background: var(--navy); color: var(--on-dark); padding-block: 80px 32px; overflow: hidden; }
+footer .lines { position: absolute; right: -40px; bottom: -20px; width: min(640px, 80%); color: #ffffff; opacity: .06; pointer-events: none; }
+.foot-top { position: relative; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: end; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.foot-top h2 { font-size: clamp(30px, 4vw, 48px); font-weight: 800; }
+.foot-top h2 em { font-style: normal; color: #E3C9A6; }
+.contact-box { display: grid; gap: 12px; }
+.contact-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: rgba(255,255,255,.06); border-radius: 14px; padding: 14px 16px; }
+.contact-row .k { font-size: 12px; color: var(--on-dark-muted); }
+.contact-row .v { font-weight: 600; user-select: all; overflow-wrap: anywhere; }
+.contact-row a.v { text-decoration: none; user-select: auto; }
+.contact-row button { font: inherit; font-size: 13px; font-weight: 600; background: var(--bronze); color: var(--white); border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.foot-cols { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-block: 40px; }
+.foot-cols h4 { margin: 0 0 12px; font-size: 15px; }
+.foot-cols a, .foot-cols p { display: block; text-decoration: none; color: var(--on-dark-muted); font-size: 14px; margin-bottom: 8px; }
+.foot-cols a:hover { color: var(--on-dark); }
+.foot-bottom { position: relative; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; color: var(--on-dark-muted); }
+
+
+.notice { font-size: 13px; color: var(--muted); background: #F5F4F9; border-radius: 12px; padding: 10px 14px; margin-top: 24px; text-align: center; }
+
+@media (max-width: 900px) {
+  .nav ul { display: none; }
+  .menu-btn { display: block; }
+  .cards, .tools { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .foot-top { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .cards, .tools, .foot-cols { grid-template-columns: 1fr; }
+  .card { min-height: 360px; }
+  .nav .pill.bronze { display: none; }
+  .about { padding-block: 72px; }
+  .band, .tools-sec { padding-block: 72px; }
+  .tl-sec { padding-block: 72px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-tabs button { transition: none; }
+}
+</style>
+
+<div class="nav-shell gutter">
+  <div class="wrap">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="#top" aria-label="Your Name, home">
+        <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="9" fill="#22213A"/><path d="M8 24 V10 M8 10 H26 M26 10 V24 M13 10 V24 M21 10 V24" stroke="#E3C9A6" stroke-width="2" fill="none"/><path d="M6 25 H28" stroke="#fff" stroke-width="2.4"/></svg>
+        YOUR NAME
+      </a>
+      <ul>
+        <li><a href="#projects">Timeline</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="#expertise">Expertise</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <a class="pill bronze" href="#contact">Get in touch</a>
+        <button type="button" class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <a href="#projects">Timeline</a><a href="projects.html">Projects</a><a href="#expertise">Expertise</a><a href="#about">About</a><a href="#contact">Contact</a>
+    </div>
+  </div>
+</div>
+
+<header class="hero" id="top">
+  <div id="hero-media"></div>
+  <div class="hero-content gutter">
+    <div class="wrap hero-row">
+      <div>
+        <p class="eyebrow">Your Name · Civil Engineer · On site since 2020</p>
+        <h1>I build villas, offices and industrial buildings, from excavation to handover.</h1>
+      </div>
+      <div class="actions">
+        <a class="pill light" href="projects.html">All projects</a>
+        <button type="button" class="pill vid-toggle" id="vid-toggle" hidden>Pause video</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="gutter"><div class="wrap"><p class="notice">Projects, dates, roles, photos and videos are yours. Your name, contact details, software list and credentials are still placeholders.</p></div></div>
+
+<section class="stats-band gutter" aria-label="Key figures">
+  <div class="wrap stats">
+    <div><b>6 years</b><span>On site, 2020–2026</span></div>
+    <div><b>10</b><span>Projects</span></div>
+    <div><b>4</b><span>Building types: villas, housing, offices, industrial</span></div>
+    <div><b>4</b><span>Roles, from student engineer to project manager</span></div>
+  </div>
+</section>
+
+<section class="tl-sec gutter" id="projects" aria-labelledby="tl-h">
+  <div class="wrap">
+    <div class="tl-head">
+      <h2 id="tl-h">Projects, newest first</h2>
+      <p>From an industrial cold store, finished in 2026, back to the internship where I started. Swipe or use the arrows: each project plays as it comes into view.</p>
+    </div>
+    <div class="tl-bar">
+      <div class="tl-tabs" id="tl-tabs" role="group" aria-label="Jump to a year"></div>
+      <div class="tl-ctrl">
+        <span class="tl-count" id="tl-count"></span>
+        <button type="button" class="tl-arrow" id="tl-prev" aria-label="Previous project">‹</button>
+        <button type="button" class="tl-arrow" id="tl-next" aria-label="Next project">›</button>
+      </div>
+    </div>
+    <p class="tl-note" id="tl-note"></p>
+    <div class="tl-track" id="tl-track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Projects timeline"></div>
+  </div>
+</section>
+
+<section class="band gutter" id="expertise">
+  <div class="wrap">
+    <h2>What I do</h2>
+    <div class="cards" id="services"></div>
+  </div>
+</section>
+
+<section class="about gutter" id="about">
+  <div class="lines" aria-hidden="true" id="about-lines"></div>
+  <div class="inner">
+    <img class="portrait" src="media/portrait.webp" alt="Your Name on site in a hard hat and hi-vis vest, above the lake at the lakeside villa">
+    <h2>On site since 2020</h2>
+    <p>I started in 2020 as a student engineer on business centres and apartment blocks, handling quality control, BOQs, RFIs, reports and subcontractors for the project manager. Since then I've run the project on a lakeside villa for our first international client, been site engineer on a classical mansion and a hillside villa, and most recently managed the construction of an industrial cold store as project manager.</p>
+  </div>
+</section>
+
+<section class="tools-sec gutter" aria-labelledby="tools-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="tools-h">Software and design codes</h2></div>
+    <div class="tools">
+      <div class="tool"><h3>Analysis &amp; design</h3><ul><li>ETABS · SAP2000 · SAFE</li><li>CSiBridge</li><li>Robot Structural Analysis</li></ul></div>
+      <div class="tool"><h3>Modelling &amp; detailing</h3><ul><li>Revit Structure · Tekla</li><li>AutoCAD</li><li>Rebar scheduling to BS 8666</li></ul></div>
+      <div class="tool"><h3>Design codes</h3><ul><li>Eurocode 2, 3 and 8</li><li>ACI 318-19</li><li>AASHTO LRFD</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<footer class="gutter" id="contact">
+  <div class="lines" aria-hidden="true" id="foot-lines"></div>
+  <div class="wrap">
+    <div class="foot-top">
+      <h2>Available for consulting and full-time roles.</h2>
+      <div class="contact-box">
+        <div class="contact-row"><div><p class="k">Email</p><p class="v" id="email">you@example.com</p></div><button type="button" id="copy-email">Copy</button></div>
+        <div class="contact-row"><div><p class="k">Phone</p><p class="v">+00 000 000 0000</p></div></div>
+        <div class="contact-row"><div><p class="k">LinkedIn</p><a class="v" href="https://www.linkedin.com/" target="_blank" rel="noopener">linkedin.com/in/yourname</a></div></div>
+      </div>
+    </div>
+    <div class="foot-cols">
+      <div><h4>Menu</h4><a href="#about">About</a><a href="#expertise">Expertise</a><a href="#projects">Timeline</a><a href="projects.html">All projects</a></div>
+      <div><h4>Experience</h4><p>2024 – 2026 · Project Manager · Universal Cold Store</p><p>2023 – 2024 · Site Engineer · Hamad Bey villa</p><p>2022 – 2024 · Site Engineer · Zaid Bey mansion</p><p>2021 – 2023 · Project Engineer · Muhammed Bey villa</p><p>2020 – 2021 · Student Engineer · Business centres &amp; housing</p></div>
+      <div><h4>Credentials</h4><p>M.Sc. Structural Engineering</p><p>B.Sc. Civil Engineering</p><p>Professional Engineer, Licence 000000</p></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Your Name</span><span>Based in Your City</span></div>
+  </div>
+</footer>
+
+
+<script src="projects.js"></script>
+<script>
+// Hero video: set to a video file published with the page (e.g. "hero.mp4").
+const HERO_VIDEO = "media/hero.mp4";
+const HERO_POSTER = "media/lake-dusk.jpg";
+
+// Line drawings used as placeholders and background texture.
+const DRAW = {
+  skyline: () => {
+    let s = "";
+    const blocks = [[40,120,90],[140,60,70],[220,150,60],[290,20,110],[410,90,80],[500,140,70],[580,50,100],[690,110,80]];
+    blocks.forEach(([x, top, w]) => {
+      s += `<rect x="${x}" y="${top}" width="${w}" height="${300-top}" stroke-width="1.4"/>`;
+      for (let y = top + 22; y < 300; y += 22) s += `<path d="M${x} ${y} H${x+w}" stroke-width=".7"/>`;
+      for (let c = x + w / 3; c < x + w; c += w / 3) s += `<path d="M${c} ${top} V300" stroke-width=".7"/>`;
+    });
+    return `<svg viewBox="0 0 800 310" fill="none" stroke="currentColor" preserveAspectRatio="xMidYMid slice">${s}<path d="M0 300 H800" stroke-width="2"/></svg>`;
+  },
+  frame: () => `<svg viewBox="0 0 400 230" fill="none" stroke="currentColor">${[0,1,2,3,4,5,6,7,8].map(f=>`<path d="M90 ${210-f*22} H310" stroke-width="${f?1.2:2.5}"/>`).join("")}${[90,145,255,310].map(x=>`<path d="M${x} 210 V34" stroke-width="1.6"/>`).join("")}<rect x="178" y="34" width="44" height="176" stroke-width="1.6" fill="currentColor" fill-opacity=".1"/><path d="M70 222 H330" stroke-width="4"/></svg>`,
+  bridge: () => `<svg viewBox="0 0 400 230" fill="none" stroke="currentColor"><path d="M10 70 H390" stroke-width="3"/><path d="M10 82 H390" stroke-width="1.2"/><path d="M118 82 V170 M282 82 V170" stroke-width="7"/><path d="M10 82 V170 M390 82 V170" stroke-width="3"/><path d="M0 170 H400" stroke-width="1"/><path d="M0 150 Q100 140 200 152 T400 150" stroke-width="1" stroke-dasharray="5 4"/></svg>`,
+  beam: () => `<svg viewBox="0 0 400 230" fill="none" stroke="currentColor"><rect x="110" y="18" width="180" height="210" stroke-width="2"/><rect x="122" y="30" width="156" height="186" rx="6" stroke-width="1.2"/>${[0,1,2,3,4,5].map(i=>`<circle cx="${132+i*27}" cy="204" r="6" fill="currentColor"/><circle cx="${132+i*27}" cy="186" r="6" fill="currentColor"/>`).join("")}<circle cx="132" cy="40" r="5" fill="currentColor"/><circle cx="267" cy="40" r="5" fill="currentColor"/></svg>`,
+  column: () => `<svg viewBox="0 0 400 230" fill="none" stroke="currentColor"><rect x="120" y="30" width="160" height="160" stroke-width="2" stroke-dasharray="7 5"/><rect x="135" y="45" width="130" height="130" stroke-width="1.2" rx="5"/><rect x="160" y="70" width="80" height="80" stroke-width="1"/>${[[150,60],[200,60],[250,60],[150,110],[250,110],[150,160],[200,160],[250,160]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="currentColor"/>`).join("")}</svg>`,
+  grid: () => `<svg viewBox="0 0 400 230" fill="none" stroke="currentColor">${[60,140,220,300].map(x=>`<path d="M${x} 20 V210" stroke-width="1" stroke-dasharray="6 4"/><circle cx="${x}" cy="14" r="9" stroke-width="1"/>`).join("")}${[50,110,170].map(y=>`<path d="M40 ${y} H340" stroke-width="1" stroke-dasharray="6 4"/>`).join("")}${[60,140,220,300].flatMap(x=>[50,110,170].map(y=>`<rect x="${x-7}" y="${y-7}" width="14" height="14" fill="currentColor"/>`)).join("")}</svg>`,
+  site: () => `<svg viewBox="0 0 400 230" fill="none" stroke="currentColor"><path d="M80 210 V40 H300" stroke-width="3"/><path d="M80 40 L300 40 L80 70" stroke-width="1.2"/><path d="M250 40 V120" stroke-width="1"/><rect x="236" y="120" width="28" height="18" stroke-width="1.4"/><path d="M60 210 H340" stroke-width="2"/>${[0,1,2,3].map(i=>`<path d="M150 ${200-i*24} H320" stroke-width="1.2"/>`).join("")}<path d="M150 200 V128 M320 200 V128" stroke-width="1.4"/></svg>`,
+  code: () => `<svg viewBox="0 0 400 230" fill="none" stroke="currentColor"><rect x="70" y="30" width="260" height="170" rx="10" stroke-width="1.6"/><path d="M70 58 H330" stroke-width="1.2"/><path d="M110 100 l-20 20 l20 20 M290 100 l20 20 l-20 20 M220 90 l-40 70" stroke-width="2.4"/></svg>`,
+};
+
+const media = (p) => p.img ? `<img src="${p.img}" alt="" loading="lazy">` : DRAW[p.draw]();
+
+// Hero
+const heroMedia = document.getElementById("hero-media");
+const toggle = document.getElementById("vid-toggle");
+if (HERO_VIDEO) {
+  heroMedia.innerHTML = `<video autoplay muted loop playsinline ${HERO_POSTER ? `poster="${HERO_POSTER}"` : ""} src="${HERO_VIDEO}"></video>`;
+  const v = heroMedia.querySelector("video");
+  toggle.hidden = false;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); toggle.textContent = "Play video"; }
+  toggle.addEventListener("click", () => {
+    if (v.paused) { v.play(); toggle.textContent = "Pause video"; } else { v.pause(); toggle.textContent = "Play video"; }
+  });
+} else {
+  heroMedia.innerHTML = `<div class="ph" aria-hidden="true">${DRAW.skyline()}</div><span class="ph-note">Hero video goes here</span>`;
+}
+document.getElementById("about-lines").innerHTML = DRAW.skyline();
+document.getElementById("foot-lines").innerHTML = DRAW.frame();
+
+// Services, each shown with a photo from a real site.
+const SERVICES = [
+  { title: "Excavation & Earthworks", tag: "Site works", img: "media/svc-excavation.jpg", text: "Cutting into steep slopes, retaining the ground and draining it before the first pour." },
+  { title: "Setting Out & Levels", tag: "Total station", img: "media/svc-survey.jpg", text: "Gridlines, levels and curved walls set out on site and checked at every stage." },
+  { title: "Rebar & Concrete", tag: "Inspection", img: "media/svc-rebar.jpg", text: "Reinforcement checked against the drawings before every pour, from rafts to retaining walls." },
+  { title: "Waterproofing", tag: "Basements · roofs", img: "media/svc-waterproof.jpg", text: "Membranes on basement walls and roofs, with drainage at the footings." },
+  { title: "Steel Structures", tag: "Industrial", img: "media/svc-steel.jpg", text: "Steel roof frames and block infill for industrial buildings." },
+  { title: "Finishing & Handover", tag: "Interiors", img: "media/svc-finishing.jpg", text: "Marble, gypsum ceilings and joinery, coordinated across trades through to handover." },
+];
+document.getElementById("services").innerHTML = SERVICES.map(s => `
+  <article class="card">
+    <div class="media" aria-hidden="true">${media(s)}</div>
+    <div class="text"><h3>${s.title}</h3><p>${s.text}</p><span class="tag">${s.tag}</span></div>
+  </article>`).join("");
+
+// Timeline. Project names, dates, roles and types come from projects.js (edit them there).
+// Each entry is one card; `stage` splits a big project into several cards.
+// If a project has a `hero` video in projects.js, it replaces the background of that project's first card.
+// Newest first.
+const P = Object.fromEntries((window.SITE_PROJECTS || []).map(p => [p.id, p]));
+const TIMELINE = [
+  { year: "2024", note: "My first project as project manager.", items: [
+    { id: "coldstore", media: { type: "video", src: "media/coldstore.mp4" },
+      text: "A steel roof frame over a concrete and block structure for a cold storage warehouse. I managed the project from late 2024 to completion in mid 2026.",
+      chips: ["Industrial", "Steel roof", "Block walls"] },
+  ]},
+  { year: "2023", items: [
+    { id: "hamad", media: { type: "video", src: "media/villa-hill.mp4" },
+      text: "A three-storey villa on a wooded slope, taken from waterproofed foundations to the finished façade.",
+      chips: ["3 storeys", "Hillside site", "Façade"] },
+  ]},
+  { year: "2022", note: "My first role as site engineer.", items: [
+    { id: "zaid", stage: "From the air", media: { type: "video", src: "media/mansion-garden.mp4" },
+      text: "A U-shaped mansion on a hillside, with balustraded terraces and landscaped grounds. I was site engineer from mid 2022 until handover in early 2024.",
+      chips: ["Courtyard plan", "Balustrades", "Landscaping"] },
+    { id: "zaid", stage: "Interiors", media: { type: "image", src: "media/mansion-rotunda.jpg" },
+      text: "A columned rotunda with a coffered gypsum ceiling, marble floors and a curved staircase.",
+      chips: ["Rotunda", "Columns", "Marble"] },
+    { id: "naser", media: { type: "image", src: "media/white-balconies.jpg" },
+      text: "Curved balconies on the main façade and retaining walls along the sloping garden.",
+      chips: ["Curved balconies", "Retaining wall", "Site works"] },
+  ]},
+  { year: "2021", note: "My first full-time role, on our first international client's villa. I graduated partway through the build.", items: [
+    { id: "muhammed", stage: "The site", media: { type: "image", src: "media/lake-dusk.jpg" },
+      text: "A hillside plot above the lake. I coordinated the project from late 2021 to early 2023: drawings, subcontractors, quality checks and reporting to the client.",
+      chips: ["Hillside site", "Client reporting", "Coordination"] },
+    { id: "muhammed", stage: "Foundations", media: { type: "video", src: "media/lake-foundation.mp4" },
+      text: "Excavating a steep slope, building the retaining walls and laying the raft, with the lake behind us the whole way.",
+      chips: ["Retaining walls", "Raft foundation", "Earthworks"] },
+    { id: "muhammed", stage: "The curved frame", media: { type: "image", src: "media/lake-frame.jpg" },
+      text: "Two storeys of curved slabs and columns, set out on site and checked level by level.",
+      chips: ["Curved slabs", "Concrete frame", "Setting out"] },
+    { id: "muhammed", stage: "Handover", media: { type: "image", src: "media/lake-hall.jpg" },
+      text: "A double-height hall with curved glazing over the lake, marble floors and gypsum ceilings, finished and handed over.",
+      chips: ["Curved glazing", "Marble floors", "Handover"] },
+    { id: "oral", media: { type: "image", src: "media/office-membrane.jpg" },
+      text: "Roof waterproofing, plaster and interior finishes on a multi-storey commercial building.",
+      chips: ["Commercial", "Waterproofing", "Finishes"] },
+  ]},
+  { year: "2020", note: "Student engineer, working for the project manager on quality control, BOQs, RFIs, reporting and subcontractor coordination.", items: [
+    { id: "morgul", media: { type: "image", src: "media/morgul-slab.jpg" },
+      text: "Slab reinforcement checked and poured by pump on a mid-rise concrete-frame office building.",
+      chips: ["Concrete frame", "Slab rebar", "Pump pour"] },
+    { id: "seker", media: { type: "image", src: "media/seker-columns.jpg" },
+      text: "Column formwork and floor slabs for an apartment block on a tight urban plot.",
+      chips: ["Residential", "Formwork", "Columns"] },
+    { id: "karaosman", media: { type: "image", src: "media/p/karaosman/p01.jpg" },
+      text: "An apartment building with a grey-brick façade, taken through to fitted kitchens and finished interiors.",
+      chips: ["Residential", "Brick façade", "Finishes"] },
+  ]},
+  { year: "Intern", items: [
+    { id: "intern", media: { type: "image", src: "media/intern-street.jpg" },
+      text: "Street excavation and pipe laying, with site visits to a water treatment plant and a solar installation.",
+      chips: ["Excavation", "Pipe works", "Infrastructure"] },
+  ]},
+];
+
+// Carousel: one slide per timeline entry. A project's hero video (projects.js) replaces its first slide's media.
+const track = document.getElementById("tl-track"), tabsEl = document.getElementById("tl-tabs");
+const prevBtn = document.getElementById("tl-prev"), nextBtn = document.getElementById("tl-next");
+const countEl = document.getElementById("tl-count"), noteEl = document.getElementById("tl-note");
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const behavior = reduceMotion ? "auto" : "smooth";
+
+const heroDone = new Set();
+const cards = [];
+TIMELINE.forEach(y => y.items.forEach(it => {
+  const p = P[it.id] || { name: it.id, type: "" };
+  let m = it.media;
+  if (p.hero && !heroDone.has(it.id)) m = { type: "video", src: p.hero, poster: p.hero.replace(/\.\w+$/, ".jpg") };
+  heroDone.add(it.id);
+  cards.push({ year: y.year, p, it, m });
+}));
+
+track.innerHTML = cards.map((c, i) => {
+  const { p, it, m } = c;
+  const media = m.type === "video"
+    ? `<video muted loop playsinline preload="metadata" poster="${m.poster || m.src.replace(/\.\w+$/, ".jpg")}" src="${m.src}#t=0.1"></video>`
+    : `<img src="${m.src}" alt="${p.name}${it.stage ? ", " + it.stage : ""}" ${i > 2 ? 'loading="lazy"' : ""}>`;
+  return `<article class="tl-slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${cards.length}">
+    <div class="m">${media}</div>
+    <p class="yr">${c.year}</p>
+    <div class="text">
+      <p class="meta">${[p.period || p.year, p.type, p.role, it.stage].filter(Boolean).join(" · ")}</p>
+      <h3>${p.name}</h3><p class="desc">${it.text}</p>
+      <div class="chips">${it.chips.map(ch => `<span>${ch}</span>`).join("")}</div>
+      <a class="more" href="projects.html#${it.id}">See all photos &amp; videos →</a>
+    </div>
+  </article>`;
+}).join("");
+
+const slides = [...track.children];
+const years = TIMELINE.map(y => String(y.year));
+const yearInfo = Object.fromEntries(TIMELINE.map(y => [y.year, {
+  first: cards.findIndex(c => c.year === y.year),
+  text: y.note || [...new Set(y.items.map(it => (P[it.id] || {}).name || it.id))].join(" · "),
+}]));
+tabsEl.innerHTML = years.map(y => `<button type="button" data-year="${y}">${y}</button>`).join("");
+const tabs = [...tabsEl.children];
+
+let step = 1, gap = 20, perView = 1, curYear = null;
+function measure() {
+  if (slides.length < 2) { step = track.clientWidth; return; }
+  gap = slides[1].offsetLeft - slides[0].offsetLeft - slides[0].offsetWidth;
+  step = slides[0].offsetWidth + gap;
+  perView = Math.max(1, Math.floor((track.clientWidth + gap) / step + 0.05));
+}
+const maxScroll = () => track.scrollWidth - track.clientWidth;
+const go = d => track.scrollBy({ left: d * step, behavior });
+
+let ticking = false;
+function sync() {
+  ticking = false;
+  measure();
+  const atStart = track.scrollLeft <= 2, atEnd = track.scrollLeft >= maxScroll() - 2;
+  const first = Math.min(slides.length - 1, Math.round(track.scrollLeft / step));
+  const last = Math.min(slides.length - 1, atEnd ? slides.length - 1 : first + perView - 1);
+  prevBtn.disabled = atStart; nextBtn.disabled = atEnd;
+  countEl.textContent = last > first ? `${first + 1}–${last + 1} of ${slides.length}` : `${first + 1} of ${slides.length}`;
+
+  // The year follows the first card in view (the last one when scrolled to the end)
+  const yr = String(cards[atEnd ? last : first].year);
+  if (yr !== curYear) {
+    curYear = yr;
+    tabs.forEach(b => b.setAttribute("aria-current", String(b.dataset.year === yr)));
+    noteEl.innerHTML = `<b>${yr}</b> · ${yearInfo[yr].text}`;
+  }
+
+  // Videos play only while their card is on screen
+  const r = track.getBoundingClientRect(), onScreen = r.bottom > 0 && r.top < window.innerHeight;
+  slides.forEach((s, i) => {
+    const v = s.querySelector("video");
+    if (!v) return;
+    const show = onScreen && i >= first && i <= last;
+    if (show && !reduceMotion) { if (v.paused) v.play().catch(() => {}); } else if (!v.paused) v.pause();
+    if (i >= first - 1 && i <= last + 2 && v.preload !== "auto") v.preload = "auto";
+  });
+}
+const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(sync); } };
+window.addEventListener("scroll", onScroll, { passive: true, capture: true });
+window.addEventListener("resize", onScroll);
+window.addEventListener("load", onScroll);
+
+prevBtn.addEventListener("click", () => go(-1));
+nextBtn.addEventListener("click", () => go(1));
+tabs.forEach(b => b.addEventListener("click", () => {
+  track.scrollTo({ left: Math.min(yearInfo[b.dataset.year].first * step, maxScroll()), behavior });
+}));
+track.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+  if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
+});
+sync();
+
+// Mobile menu
+const menuBtn = document.getElementById("menu-btn"), menu = document.getElementById("mobile-menu");
+menuBtn.addEventListener("click", () => {
+  menu.hidden = !menu.hidden;
+  menuBtn.setAttribute("aria-expanded", String(!menu.hidden));
+});
+menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => { menu.hidden = true; menuBtn.setAttribute("aria-expanded", "false"); }));
+
+// Copy email
+document.getElementById("copy-email").addEventListener("click", e => {
+  const btn = e.currentTarget, val = document.getElementById("email");
+  navigator.clipboard.writeText(val.textContent).then(() => {
+    btn.textContent = "Copied";
+    setTimeout(() => btn.textContent = "Copy", 1500);
+  }).catch(() => {
+    const r = document.createRange(); r.selectNodeContents(val);
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>All Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: project grid → project gallery → full-screen viewer. Same palette as the home page, always light. */
+:root {
+  --white: #FFFFFF;
+  --ink: #15172A;
+  --muted: #5E6275;
+  --line: #E4E3EC;
+  --soft: #F5F4F9;
+  --navy: #22213A;
+  --bronze: #8E6A3E;
+  --sand: #E3C9A6;
+  --font: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--white); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.6; }
+h1, h2, h3 { margin: 0; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+img, video { max-width: 100%; display: block; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--bronze); outline-offset: 3px; }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1180px; margin: 0 auto; }
+
+/* Nav */
+.nav-shell { position: sticky; z-index: 20; top: env(safe-area-inset-top, 0px); padding-block: 14px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 21; background: var(--white); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--white); border-radius: 12px; padding: 10px 12px 10px 20px; box-shadow: 0 2px 10px rgba(21, 23, 42, .08); }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 18px; letter-spacing: 0.06em; }
+.brand svg { width: 34px; height: 34px; }
+.nav-links { display: flex; align-items: center; gap: 22px; }
+.nav-links a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--muted); }
+.nav-links a:hover, .nav-links a[aria-current] { color: var(--ink); }
+.pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 9px 18px; font-weight: 600; font-size: 14px; text-decoration: none; background: var(--bronze); color: var(--white) !important; }
+
+/* Index */
+.head { padding-block: 56px 32px; display: grid; gap: 12px; }
+.head h1 { font-size: clamp(36px, 5vw, 58px); font-weight: 800; }
+.head p { color: var(--muted); max-width: 60ch; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 22px; padding-bottom: 96px; }
+.pcard { display: grid; gap: 14px; text-decoration: none; color: inherit; }
+.pcard .cover { position: relative; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; background: var(--soft); }
+.pcard .cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.pcard:hover .cover img { transform: scale(1.03); }
+.badge { position: absolute; top: 12px; left: 12px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+.pcard h2 { font-size: 22px; font-weight: 700; }
+.pcard .sub { font-size: 14px; color: var(--muted); }
+.counts { font-size: 13px; color: var(--bronze); font-weight: 600; }
+
+/* Project detail */
+.back { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-weight: 600; font-size: 14px; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; }
+.back:hover { color: var(--ink); }
+.detail-head { padding-block: 40px 28px; display: grid; gap: 14px; }
+.detail-head .meta { font-size: 14px; font-weight: 600; color: var(--bronze); }
+.detail-head h1 { font-size: clamp(38px, 6vw, 72px); font-weight: 800; }
+.detail-head p.desc { color: var(--muted); font-size: 17px; max-width: 62ch; }
+.hero-shot { aspect-ratio: 21 / 9; border-radius: 8px; overflow: hidden; background: var(--soft); margin-bottom: 22px; }
+.hero-shot img { width: 100%; height: 100%; object-fit: cover; }
+/* With a hero video: the upright film beside the cover photo */
+.hero-shot.film { --h: min(78vh, 700px); aspect-ratio: auto; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; background: none; border-radius: 0; }
+.hero-shot.film .clip { position: relative; height: var(--h); width: calc(var(--h) * 9 / 16); border-radius: 8px; overflow: hidden; background: var(--navy); }
+.hero-shot.film .clip video { width: 100%; height: 100%; object-fit: cover; }
+.hero-shot.film > img { height: var(--h); border-radius: 8px; cursor: zoom-in; }
+.hero-shot.film.wide { grid-template-columns: 1fr; }
+.hero-shot.film.wide .clip { width: 100%; }
+.hero-shot.film.wide > img { display: none; }
+.snd { position: absolute; right: 12px; bottom: 12px; font: inherit; font-size: 13px; font-weight: 600; color: var(--white); background: rgba(21,23,42,.6); backdrop-filter: blur(6px); border: 0; border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.gallery { columns: 3 280px; column-gap: 14px; padding-bottom: 40px; }
+.tile { position: relative; display: block; width: 100%; break-inside: avoid; margin: 0 0 14px; padding: 0; border: 0; border-radius: 6px; overflow: hidden; cursor: zoom-in; background: var(--soft); }
+.tile img, .tile video { width: 100%; height: auto; }
+.tile .play { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(21,23,42,.18); }
+.tile .play::before { content: ""; width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,.92); }
+.tile .play::after { content: ""; position: absolute; border-left: 16px solid var(--ink); border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin-left: 5px; }
+.next-proj { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-block: 28px 96px; }
+.next-proj a { text-decoration: none; font-weight: 700; font-size: 20px; }
+.next-proj a span { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
+
+/* Viewer */
+.viewer { position: fixed; inset: 0; z-index: 50; background: rgba(13, 14, 26, .96); display: grid; grid-template-rows: auto 1fr auto; color: var(--white);
+  padding: calc(env(safe-area-inset-top, 0px) + 12px) max(12px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 12px) max(12px, env(safe-area-inset-left, 0px)); }
+.viewer .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; }
+.viewer .stage { position: relative; display: grid; place-items: center; min-height: 0; padding-block: 12px; }
+.viewer .stage img, .viewer .stage video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; }
+.vbtn { font: inherit; font-size: 14px; font-weight: 600; color: var(--white); background: rgba(255,255,255,.12); border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+.vbtn:hover { background: rgba(255,255,255,.22); }
+.arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; font-size: 22px; padding: 0; }
+.arrow.prev { left: 4px; } .arrow.next { right: 4px; }
+.viewer .caption { text-align: center; font-size: 13px; color: var(--sand); }
+
+footer { background: var(--navy); color: #B7B5C8; padding-block: 28px; font-size: 13px; }
+footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+footer a { color: #F3F2F7; text-decoration: none; }
+
+@media (max-width: 700px) {
+  .nav-links a:not(.pill) { display: none; }
+  .hero-shot { aspect-ratio: 4 / 3; }
+  .hero-shot.film { --h: 78svh; grid-template-columns: 1fr; }
+  .hero-shot.film .clip { width: 100%; }
+  .hero-shot.film.wide .clip { height: auto; aspect-ratio: 16 / 9; }
+  .hero-shot.film > img { display: none; }
+  .arrow { width: 40px; height: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { .pcard .cover img { transition: none; } }
+</style>
+</head>
+<body>
+
+<div class="nav-shell gutter">
+  <div class="wrap">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="index.html" aria-label="Your Name, home">
+        <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="9" fill="#22213A"/><path d="M8 24 V10 M8 10 H26 M26 10 V24 M13 10 V24 M21 10 V24" stroke="#E3C9A6" stroke-width="2" fill="none"/><path d="M6 25 H28" stroke="#fff" stroke-width="2.4"/></svg>
+        YOUR NAME
+      </a>
+      <div class="nav-links">
+        <a href="index.html#projects">Timeline</a>
+        <a href="#" id="nav-all" aria-current="page">Projects</a>
+        <a class="pill" href="index.html#contact">Get in touch</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<main class="gutter">
+  <div class="wrap">
+    <section id="index-view" aria-labelledby="idx-h">
+      <div class="head">
+        <h1 id="idx-h">All projects</h1>
+        <p id="idx-sub">Every site I've worked on. Open a project to see its photos and videos.</p>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section id="detail-view" hidden aria-labelledby="d-title">
+      <div class="detail-head">
+        <a class="back" href="#" id="back">← All projects</a>
+        <p class="meta" id="d-meta"></p>
+        <h1 id="d-title"></h1>
+        <p class="desc" id="d-desc"></p>
+      </div>
+      <div class="hero-shot" id="d-hero"></div>
+      <div class="gallery" id="d-gallery"></div>
+      <div class="next-proj" id="d-next"></div>
+    </section>
+  </div>
+</main>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Media viewer">
+  <div class="bar"><span id="v-count"></span><button type="button" class="vbtn" id="v-close">Close ✕</button></div>
+  <div class="stage" id="v-stage">
+    <button type="button" class="vbtn arrow prev" id="v-prev" aria-label="Previous">‹</button>
+    <div id="v-media" style="display:contents"></div>
+    <button type="button" class="vbtn arrow next" id="v-next" aria-label="Next">›</button>
+  </div>
+  <p class="caption" id="v-caption"></p>
+</div>
+
+<footer class="gutter"><div class="wrap"><span>© 2026 Your Name</span><a href="index.html">Back to home</a></div></footer>
+
+<script src="projects.js"></script>
+<script>
+const PROJECTS = window.SITE_PROJECTS || [];
+const pad = n => String(n).padStart(2, "0");
+// The hero video (if any) sits right after the photos, ahead of the other videos.
+const files = p => [
+  ...Array.from({ length: p.photos }, (_, i) => ({ type: "image", src: `media/p/${p.id}/p${pad(i + 1)}.jpg` })),
+  ...(p.hero ? [{ type: "video", src: p.hero, hero: true }] : []),
+  ...Array.from({ length: p.videos }, (_, i) => ({ type: "video", src: `media/p/${p.id}/v${pad(i + 1)}.mp4` })),
+];
+const cover = p => `media/p/${p.id}/p01.jpg`;
+const nVideos = p => p.videos + (p.hero ? 1 : 0);
+const counts = p => [p.photos && `${p.photos} photo${p.photos > 1 ? "s" : ""}`, nVideos(p) && `${nVideos(p)} video${nVideos(p) > 1 ? "s" : ""}`].filter(Boolean).join(" · ");
+
+// Index grid
+document.getElementById("grid").innerHTML = PROJECTS.map(p => `
+  <a class="pcard" href="#${p.id}">
+    <div class="cover"><img src="${cover(p)}" alt="${p.name}" loading="lazy">${p.year ? `<span class="badge">${p.year}</span>` : ""}</div>
+    <div><h2>${p.name}</h2><p class="sub">${[p.type, p.role].filter(Boolean).join(" · ")}</p></div>
+    <p class="counts">${counts(p)}</p>
+  </a>`).join("");
+document.getElementById("idx-sub").textContent = `${PROJECTS.length} projects. Open one to see its photos and videos.`;
+
+// Detail view
+const idxView = document.getElementById("index-view"), detView = document.getElementById("detail-view");
+let current = null;
+function showProject(p) {
+  current = p;
+  const list = files(p);
+  document.getElementById("d-meta").textContent = [p.period || p.year, p.type, p.role].filter(Boolean).join(" · ");
+  document.getElementById("d-title").textContent = p.name;
+  document.getElementById("d-desc").textContent = p.description;
+  const heroEl = document.getElementById("d-hero");
+  heroEl.className = "hero-shot" + (p.hero ? " film" : "");
+  heroEl.innerHTML = (p.hero
+    ? `<div class="clip"><video autoplay muted loop playsinline poster="${p.hero.replace(/\.\w+$/, ".jpg")}" src="${p.hero}"></video><button type="button" class="snd" aria-pressed="false">Sound on</button></div>`
+    : "") + `<img src="${cover(p)}" alt="${p.name}">`;
+  if (p.hero) {
+    const v = heroEl.querySelector("video"), snd = heroEl.querySelector(".snd");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
+    v.addEventListener("loadedmetadata", () => heroEl.classList.toggle("wide", v.videoWidth > v.videoHeight));
+    snd.addEventListener("click", () => {
+      v.muted = !v.muted; if (v.paused) v.play().catch(() => {});
+      snd.textContent = v.muted ? "Sound on" : "Sound off"; snd.setAttribute("aria-pressed", String(!v.muted));
+    });
+  }
+  // Videos first after the cover, so they're easy to find (the hero video is already playing above)
+  const order = [...list.filter(f => f.type === "video" && !f.hero), ...list.filter(f => f.type === "image").slice(1)];
+  document.getElementById("d-gallery").innerHTML = order.map(f => {
+    const i = list.indexOf(f);
+    return f.type === "video"
+      ? `<button type="button" class="tile" data-i="${i}" aria-label="Play video"><video muted playsinline preload="metadata" src="${f.src}#t=0.5"></video><span class="play"></span></button>`
+      : `<button type="button" class="tile" data-i="${i}" aria-label="Open photo"><img src="${f.src}" alt="" loading="lazy"></button>`;
+  }).join("");
+  const k = PROJECTS.indexOf(p), nx = PROJECTS[(k + 1) % PROJECTS.length];
+  document.getElementById("d-next").innerHTML = `<a class="back" href="#">← All projects</a><a href="#${nx.id}"><span>Next project</span>${nx.name} →</a>`;
+  heroEl.querySelector(":scope > img").onclick = () => openViewer(0);
+  heroEl.querySelector(":scope > img").style.cursor = "zoom-in";
+  document.title = `${p.name} · Projects`;
+  idxView.hidden = true; detView.hidden = false;
+  window.scrollTo(0, 0);
+}
+const pauseHero = () => document.querySelectorAll("#d-hero video").forEach(v => v.pause());
+function showIndex() {
+  pauseHero();
+  current = null; idxView.hidden = false; detView.hidden = true;
+  document.title = "All Projects";
+}
+function route() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const p = PROJECTS.find(x => x.id === id);
+  closeViewer();
+  if (p) showProject(p); else showIndex();
+}
+document.getElementById("back").addEventListener("click", e => { e.preventDefault(); history.pushState(null, "", location.pathname); route(); });
+document.getElementById("nav-all").addEventListener("click", e => { e.preventDefault(); history.pushState(null, "", location.pathname); route(); });
+document.getElementById("d-next").addEventListener("click", e => {
+  const a = e.target.closest("a.back"); if (a) { e.preventDefault(); history.pushState(null, "", location.pathname); route(); }
+});
+window.addEventListener("hashchange", route);
+window.addEventListener("popstate", route);
+
+// Viewer
+const viewer = document.getElementById("viewer"), vMedia = document.getElementById("v-media");
+let vi = 0;
+function render() {
+  const list = files(current), f = list[vi];
+  vMedia.innerHTML = f.type === "video"
+    ? `<video src="${f.src}" controls autoplay playsinline></video>`
+    : `<img src="${f.src}" alt="${current.name}, ${vi + 1} of ${list.length}">`;
+  document.getElementById("v-count").textContent = `${vi + 1} / ${list.length}`;
+  document.getElementById("v-caption").textContent = `${current.name}${current.year ? " · " + current.year : ""}`;
+}
+function openViewer(i) { pauseHero(); vi = i; viewer.hidden = false; document.body.style.overflow = "hidden"; render(); document.getElementById("v-close").focus(); }
+function closeViewer() { if (viewer.hidden) return; viewer.hidden = true; vMedia.innerHTML = ""; document.body.style.overflow = ""; }
+function step(d) { const n = files(current).length; vi = (vi + d + n) % n; render(); }
+document.getElementById("d-gallery").addEventListener("click", e => { const t = e.target.closest(".tile"); if (t) openViewer(+t.dataset.i); });
+document.getElementById("v-close").addEventListener("click", closeViewer);
+document.getElementById("v-prev").addEventListener("click", () => step(-1));
+document.getElementById("v-next").addEventListener("click", () => step(1));
+viewer.addEventListener("click", e => { if (e.target === viewer || e.target.id === "v-stage") closeViewer(); });
+document.addEventListener("keydown", e => {
+  if (viewer.hidden) return;
+  if (e.key === "Escape") closeViewer();
+  if (e.key === "ArrowLeft") step(-1);
+  if (e.key === "ArrowRight") step(1);
+});
+let tx = null;
+viewer.addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive: true });
+viewer.addEventListener("touchend", e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1); tx = null; });
+
+route();
+</script>
+</body>
+</html>
